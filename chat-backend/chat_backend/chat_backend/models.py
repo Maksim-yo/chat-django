@@ -1,10 +1,9 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import User
 
 
 class Chat(models.Model):
-    chat_id = models.AutoField(primary_key=True)
+    chat_line_id = models.AutoField(primary_key=True)
 
 
 class ChatLine(models.Model):
@@ -16,7 +15,3 @@ class ChatLine(models.Model):
     is_read = models.BooleanField(default=False)
     message_hash = models.CharField(max_length=255, null=False)
 
-
-class ChatUser(models.Model):
-    user_chats = models.ManyToManyField(Chat)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
