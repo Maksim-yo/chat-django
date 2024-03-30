@@ -25,21 +25,25 @@ def create_token(user):
     return token.key
 
 
+def authenticate_credentials(key):
+    try:
+        token = Token.objects.get(key=key)
+    except Token.DoesNotExist:
+        raise AuthenticationFailed("Invalid Token!")
+
+    if not token.user.is_active:
+        raise AuthenticationFailed("User inactive or deleted")
+
+    if is_token_expired(token):
+        handle_token_expired(token)
+        msg = "The token is expired!, user have to login again."
+        response = {"msg": msg}
+        raise AuthenticationFailed(response)
+
+    return token.user, token
+
+
 class ExpiringTokenAuthentication(TokenAuthentication):
 
     def authenticate_credentials(self, key):
-        try:
-            token = Token.objects.get(key=key)
-        except Token.DoesNotExist:
-            raise AuthenticationFailed("Invalid Token!")
-
-        if not token.user.is_active:
-            raise AuthenticationFailed("User inactive or deleted")
-
-        if is_token_expired(token):
-            handle_token_expired(token)
-            msg = "The token is expired!, user have to login again."
-            response = {"msg": msg}
-            raise AuthenticationFailed(response)
-
-        return token.user, token
+        return authenticate_credentials(key)

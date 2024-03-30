@@ -25,13 +25,14 @@ SECRET_KEY = "django-insecure-rkev=($l-_6k=_s^!mgmonnjx78)^8l2n2zbo9s(etxj9xh)f=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     "daphne",
+    'corsheaders',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -155,3 +157,8 @@ REST_FRAMEWORK = {
     ],
 
 }
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer',
+}
+CORS_ORIGIN_ALLOW_ALL = True
+AUTH_USER_MODEL = 'accounts.ChatUser'
