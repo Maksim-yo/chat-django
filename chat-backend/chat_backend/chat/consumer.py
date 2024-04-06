@@ -11,13 +11,13 @@ from .dto import *
 
 class RoomConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
-        # if self.scope["user"].is_anonymous:
-        #     await self.close()
-        # else:
-        self.scope["user"] = await User.objects.aget(username="testaaa")
         self.rooms = {}
 
-        await self.accept()
+        if self.scope["user"].is_anonymous:
+            await self.close()
+            return
+
+        await self.accept("auth_protocol")
         await self.send_json("self.init_message()")
         init_msg = await self.init_message()
         for chat in init_msg.chats:
@@ -31,7 +31,6 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
         for room_name in self.rooms.keys():
             self.channel_layer.group_discard(room_name, self.channel_name)
 
-        await self.close()
 
     async def receive_json(self, content, **kwargs):
 
@@ -47,7 +46,7 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
 
     async def init_message(self):
         user = self.scope["user"]
-        user_chats = await sync_to_async(lambda : user.chatuser.user_chats)()
+        user_chats = await sync_to_async(lambda : user.user_chats)()
         chats_dto = []
         async for chat in user_chats.all():
             messages = []
@@ -58,7 +57,7 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
                                            is_read=message.is_read, chat_id=chat.chat_id))
             _peers = await sync_to_async(lambda : chat.chatuser_set)()
             async for peer in _peers.all():
-                username = await sync_to_async(lambda: peer.user.username)()
+                username = await sync_to_async(lambda: peer.username)()
                 peers.append(PeerDto(username=username))
             chats_dto.append(ChatDto(chat_id=chat.chat_id, history=messages, peers=peers))
 
