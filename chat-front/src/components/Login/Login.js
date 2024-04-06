@@ -1,26 +1,46 @@
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogin } from "../../features/auth/authAction";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { skipToken } from "@reduxjs/toolkit/query";
+import { usePostLoginMutation } from "../../app/services/api/apiService";
+import { isCancel } from "axios";
+import { setToken } from "../../features/auth/authSlice";
 export default function Login() {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
 
-  const { loading, userInfo, error } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onFormSubmit = (data) => dispatch(userLogin(data));
+  const [
+    postLogin,
+    { data: loginResult, isLoading, error, isError, isSuccess },
+  ] = usePostLoginMutation();
 
   const onErrors = (errors) => console.error(errors);
 
   useEffect(() => {
-    if (userInfo) {
+    if (error?.status > 200) {
+      setError("root.serverError", {
+        type: error.status,
+      });
+    }
+  }, [navigate, error, setError, loginResult]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(loginResult);
+      dispatch(setToken(loginResult.token));
+      localStorage.setItem("userToken", loginResult.token);
       navigate("/");
     }
-  }, [navigate, userInfo]);
-
+  }, [isSuccess]);
   return (
     <section class="vh-100">
       <div class="container py-5 h-100">
@@ -33,8 +53,18 @@ export default function Login() {
             />
           </div>
           <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-            <form method="POST" onSubmit={handleSubmit(onFormSubmit, onErrors)}>
+            <form method="POST" onSubmit={handleSubmit(postLogin, onErrors)}>
+              <small className="text-danger">
+                <p>
+                  {errors.root?.serverError.type === 400 &&
+                    "Login/password incorrect, please try again"}
+                </p>
+              </small>
+
               <div class="form-outline mb-4">
+                <label class="form-label" for="mail">
+                  Email
+                </label>
                 <input
                   type="email"
                   id="mail"
@@ -42,12 +72,12 @@ export default function Login() {
                   class="form-control form-control-lg"
                   {...register("email")}
                 />
-                <label class="form-label" for="mail">
-                  Username
-                </label>
               </div>
 
               <div class="form-outline mb-4">
+                <label class="form-label" for="password">
+                  Password
+                </label>
                 <input
                   type="password"
                   id="password"
@@ -55,17 +85,14 @@ export default function Login() {
                   class="form-control form-control-lg"
                   {...register("password")}
                 />
-                <label class="form-label" for="password">
-                  Password
-                </label>
               </div>
 
               <button
                 type="submit"
                 class="btn btn-primary btn-lg btn-block float-end"
-                disabled={loading}
+                disabled={isLoading}
               >
-                {loading ? (
+                {isLoading ? (
                   <>
                     <span
                       class="spinner-border spinner-border-sm me-3"

@@ -1,9 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../../features/auth/authAction";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { usePostSignUpMutation } from "../../app/services/api/apiService";
 
 export default function SignUp() {
   const {
@@ -13,21 +13,22 @@ export default function SignUp() {
     watch,
   } = useForm();
 
-  const { loading, userInfo, error, success } = useSelector(
-    (state) => state.auth
-  );
+  const { loading, userInfo, success } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  const onFormSubmit = (data) => dispatch(registerUser(data));
+  const [
+    postSignup,
+    { data: signupResult, isLoading, error, isError, isSuccess },
+  ] = usePostSignUpMutation();
 
   const onErrors = (errors) => console.error(errors);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (success) navigate("/login");
+    if (isSuccess) navigate("/login");
     if (userInfo) navigate("/");
-  }, [navigate, userInfo, success]);
+  }, [navigate, isSuccess, userInfo]);
 
   const registerOptions = {
     name: { required: "Userame is required" },
@@ -58,7 +59,7 @@ export default function SignUp() {
                       class="mx-1 mx-md-4"
                       action=""
                       method="POST"
-                      onSubmit={handleSubmit(onFormSubmit, onErrors)}
+                      onSubmit={handleSubmit(postSignup, onErrors)}
                     >
                       {error && <div class="text-danger">{error}</div>}
                       <div class="d-flex flex-row align-items-center mb-4">
