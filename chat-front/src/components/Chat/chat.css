@@ -1,0 +1,50 @@
+
+html,
+    body {
+      background-color: #ffffff;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+
+    }
+#root {
+    height: 100%;
+}
+    .chatHistory .userChat:hover {
+
+        background-color: #eee;
+  
+      }
+  
+      .bg-message-sender {
+  
+        background-color: #89CFF0;
+  
+      }
+  
+      .chat {
+        height: 50%;
+        max-height: 50%;
+      }
+  
+      #scroll-chat-btn-bottom:hover {
+        background-color: #a5a4b7 !important;
+      }
+      
+      .chat-message.date {
+        border-radius: 15px;
+         background-color: #ced4da;
+          left: 15%;
+
+      }
+.room-container {
+    color: black;
+    text-decoration: none;
+    /* background-color: aqua; */
+    border: solid 1px grey;
+}
+
+.room-container:hover {
+    background-color: #eee;
+
+}
