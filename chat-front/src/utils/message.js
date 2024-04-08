@@ -12,5 +12,7 @@ export function convertSecondsToDate(seconds) {
 
 export function getMessageStringDate(timestamp) {
   const date = convertSecondsToDate(timestamp);
+  if (date["minutes"] >= 0 && date["minutes"] <= 9)
+    date["minutes"] = "0" + date["minutes"];
   return date["hours"] + ":" + date["minutes"];
 }
