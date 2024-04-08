@@ -2,34 +2,29 @@ import "./chat.css";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { useEffect, useState } from "react";
 import { getMessageStringDate } from "../../utils/message";
+import { changeselectedRoom } from "../../features/chat/chatSlice";
 
-const Room = ({ chat_id }) => {
-  const [unreadCount, setUndreadCount] = useState(0);
-  const [lastMessage, setLastMessage] = useState("Hello");
+export const RoomWidget = ({ chat_id, history, unreadCount }) => {
+  const [lastMessage, setLastMessage] = useState("");
   const [lastMessageTimestamp, setlastMessageTimestamp] = useState("");
-  const history = useSelector(
-    (state) =>
-      state.chat.rooms?.map((room) => {
-        console.log("chat");
-        if (room.chat_id === chat_id) return room.history;
-      }),
-    shallowEqual
-  );
-
+  const dispatch = useDispatch();
   useEffect(() => {
-    console.log("ddd");
-    console.log(history);
     if (history) {
-      console.log("aaa");
-      console.log(history[0]);
-      const message = history[0][history[0].length - 1];
+      console.log(history);
+      const message = history[history.length - 1];
       setLastMessage(message.line_text);
       setlastMessageTimestamp(getMessageStringDate(message.timestamp));
     }
   }, [history]);
 
+  const selectedRoomId = useSelector((state) => state.chat.selectedRoomId);
+
   return (
-    <div role="link" class="room-container p-2 d-flex justify-content-between">
+    <div
+      role="link"
+      class="room-container p-2 d-flex justify-content-between"
+      onClick={() => dispatch(changeselectedRoom(chat_id))}
+    >
       <div class="d-flex flex-column ms-3 text-truncate">
         <p class="fw-bold mb-0 text-start " x-text="item.room_name">
           Test
@@ -48,5 +43,3 @@ const Room = ({ chat_id }) => {
     </div>
   );
 };
-
-export default Room;
