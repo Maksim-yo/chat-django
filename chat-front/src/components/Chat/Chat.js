@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import Message from "./Message";
 import { peerMessage } from "../../features/chat/chatSlice";
 import { useGetUserDetailsQuery } from "../../app/services/api/apiService";
-
+import ChatHeader from "./ChatHeader";
 export default function Chat() {
   const dispatch = useDispatch();
   const room = useSelector(
@@ -58,9 +58,10 @@ export default function Chat() {
   };
   return (
     <div class="col h-100 no-gutters ">
-      <div class="d-flex flex-column h-100">
+      <ChatHeader />
+      <div class="d-flex flex-column" style={{ height: "92%" }}>
         <ul
-          class="chat-scroller list-unstyled d-flex flex-column ms-1 mt-1"
+          class="chat-scroller list-unstyled d-flex flex-column ms-1 mt-1 align-items-start"
           id="chat-scroller"
           style={{ height: "90%", "overflow-y": "scroll" }}
           onScroll={scrollHandler}

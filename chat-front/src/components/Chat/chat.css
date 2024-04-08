@@ -87,3 +87,13 @@ html,
 .menu .search-input:disabled {
   background-color: white;
 }
+
+.chat-header {
+  background-color: gainsboro;
+}
+
+.chat-header .chat-name{
+
+  font-size: 20px;
+  font-weight: 500;
+}
