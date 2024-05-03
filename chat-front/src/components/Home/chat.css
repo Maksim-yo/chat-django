@@ -1,0 +1,158 @@
+
+    .chatHistory .userChat:hover {
+
+        background-color: #eee;
+  
+      }
+  
+      .bg-message-sender {
+  
+        background-color: #89CFF0;
+  
+      }
+  
+      .chat {
+        height: 50%;
+        max-height: 50%;
+      }
+  
+      #scroll-chat-btn-bottom:hover {
+        background-color: #a5a4b7 !important;
+      }
+      
+      .chat-message.date {
+        border-radius: 15px;
+         background-color: #ced4da;
+          left: 15%;
+          max-width: 100px;
+
+      }
+.room-container {
+    color: black;
+    text-decoration: none;
+    /* background-color: aqua; */
+    border: solid 1px grey;
+}
+
+.room-container:hover {
+    background-color: #eee;
+
+}
+
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: white;
+  overflow-x: hidden;
+  padding-top: 60px;
+  transition: 0.2s;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 20px;
+  color: black;
+  display: block;
+  transition: 0.2s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.menu .search-input:disabled {
+  background-color: white;
+}
+
+.chat-header {
+  background-color: gainsboro;
+}
+
+.chat-name{
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+
+.chat-info{
+
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.chat-email {
+  font-size: 16px;
+  font-weight: 500;
+  
+
+}
+
+.delimiter {
+  background-color: aqua;
+}
+
+.info-room-btn:hover {
+
+  background-color: #ced4da;
+}
+
+.drop {
+
+  z-index: 1000;
+  width: 95%;
+  height: 95%;
+  position: absolute;
+  margin-top: 1%;
+  background-color: rgb(250, 243, 243);
+  border-radius: 10px;
+  /* cursor: pointer; */
+}
+
+.drop .drop-text {
+
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.drop .drop-input {
+  display: none;
+}
+
+textarea{
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+
+  /* background-color: #89CFF0; */
+
+  display:block;
+
+}
+
+.text-box {
+
+  /* border: solid ; */
+  border-top: solid;
+  border-color: #ced4da;
+  
+}
+.text-box .btn:hover {
+  cursor: pointer;
+}
+

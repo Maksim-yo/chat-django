@@ -1,0 +1,16 @@
+
+
+.image {
+    min-width: 50px!important;
+    max-width: 1000px!important;
+    max-height: 700px!important;
+    min-height: 50px!important;
+
+}
+
+.image-container {
+
+    max-width: 1000px!important;
+    max-height: 700px!important;
+    
+}

@@ -13,7 +13,16 @@ const store = configureStore({
     [appApi.reducerPath]: appApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware).concat(appApi.middleware),
+    getDefaultMiddleware({
+      serializableCheck: false,
+
+      // serializableCheck: {
+      // ignoredActions: ["chat/peerMessageFile"],
+      // ignoredPaths: ["initialState.rooms"],
+      // },
+    })
+      .concat(authApi.middleware)
+      .concat(appApi.middleware),
 });
 setupListeners(store.dispatch);
 

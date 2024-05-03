@@ -1,15 +1,4 @@
 
-html,
-    body {
-      background-color: #ffffff;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-
-    }
-#root {
-    height: 100%;
-}
     .chatHistory .userChat:hover {
 
         background-color: #eee;
@@ -35,6 +24,7 @@ html,
         border-radius: 15px;
          background-color: #ced4da;
           left: 15%;
+          max-width: 100px;
 
       }
 .room-container {
@@ -92,8 +82,77 @@ html,
   background-color: gainsboro;
 }
 
-.chat-header .chat-name{
+.chat-name{
 
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 700;
 }
+
+
+.chat-info{
+
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.chat-email {
+  font-size: 16px;
+  font-weight: 500;
+  
+
+}
+
+.delimiter {
+  background-color: aqua;
+}
+
+.info-room-btn:hover {
+
+  background-color: #ced4da;
+}
+
+.drop {
+
+  z-index: 1000;
+  width: 95%;
+  height: 95%;
+  position: absolute;
+  margin-top: 1%;
+  background-color: rgb(250, 243, 243);
+  border-radius: 10px;
+  /* cursor: pointer; */
+}
+
+.drop .drop-text {
+
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.drop .drop-input {
+  display: none;
+}
+
+textarea{
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+
+  /* background-color: #89CFF0; */
+
+  display:block;
+
+}
+
+.text-box {
+
+  /* border: solid ; */
+  border-top: solid;
+  border-color: #ced4da;
+  
+}
+.text-box .btn:hover {
+  cursor: pointer;
+}
+
