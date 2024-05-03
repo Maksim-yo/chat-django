@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetUserDetailsQuery } from "../../app/services/auth/authService";
+import { useGetUserDetailsQuery } from "../../app/services/api/apiService";
 import { setCredentials } from "../../features/auth/authSlice";
 
 const Header = () => {

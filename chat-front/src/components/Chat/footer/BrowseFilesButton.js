@@ -4,16 +4,20 @@ export const BrowseFilesButton = ({ handleFile }) => {
   const inputFile = useRef(null);
 
   return (
-    <div class="d-flex">
+    <div className="d-flex">
       <input
         type="file"
-        class="d-none"
+        className="d-none"
         ref={inputFile}
         multiple
         onChange={handleFile}
       />
 
-      <div class="btn" type="button" onClick={() => inputFile.current.click()}>
+      <div
+        className="btn"
+        type="button"
+        onClick={() => inputFile.current.click()}
+      >
         <svg width="30px" height="30px" viewBox="0 0 408.318 408.318">
           <g>
             <path

@@ -43,7 +43,7 @@ class LoginSerializerView(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatUser
-        fields = ['email', 'nickname', 'displaying_name']
+        fields = ['email', 'nickname', 'avatar']
 
 
 class ChatAuthTokenSerializer(serializers.Serializer):

@@ -59,30 +59,55 @@ const baseQuery = fetchBaseQuery({
   baseUrl,
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.userToken;
-    console.log(token);
     if (token) {
       headers.set("authorization", `Token ${token}`);
-      headers.set("Content-Type", "application/json");
+      // headers.set("Content-Type", "application/json");
     }
     return headers;
   },
 });
 
-const baseQueryWithRedirect = async (args, api, extraOptions) => {
+const baseAppQuery = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
   return result;
 };
 
 export const appApi = createApi({
   reducerPath: "app_api",
-  baseQuery: baseQueryWithRedirect,
+  baseQuery: baseAppQuery,
+  tagTypes: ["Profile"],
 
   endpoints: (build) => ({
     getUserDetails: build.query({
       query: () => ({
-        url: "accounts/user/",
+        url: "accounts/profile/",
         method: "GET",
       }),
+      providesTags: ["Profile"],
+    }),
+    updateUserDetails: build.mutation({
+      query: (data) => ({
+        url: "accounts/profile/",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Profile"],
+    }),
+    getFile: build.query({
+      query: (file_id) => ({
+        url: `chat/download/${file_id}`,
+        method: "GET",
+      }),
+    }),
+    postFile: build.mutation({
+      query: (file) => {
+        return {
+          url: `chat/upload/`,
+          method: "POST",
+          body: file,
+          formData: true,
+        };
+      },
     }),
   }),
 });
@@ -92,4 +117,9 @@ export const {
   usePostSignUpMutation,
   usePostLogoutMutation,
 } = authApi;
-export const { useGetUserDetailsQuery } = appApi;
+export const {
+  useGetUserDetailsQuery,
+  usePostFileMutation,
+  useGetFileQuery,
+  useUpdateUserDetailsMutation,
+} = appApi;

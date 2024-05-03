@@ -1,10 +1,44 @@
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { useEffect, useState, useRef } from "react";
-import Message from "./Message";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+import Download from "yet-another-react-lightbox/plugins/download";
+
+import { useEffect, useState, useRef, useContext } from "react";
+import { v1 as uuidv1 } from "uuid";
 import { peerMessage } from "../../features/chat/chatSlice";
+import slides from "./temp";
+import ImageViewerContext from "./ImageViewerContext";
 import { useGetUserDetailsQuery } from "../../app/services/api/apiService";
-import ChatHeader from "./ChatHeader";
-export default function Chat({ chat_id, history, unreadCount, peers }) {
+import ChatHeader from "./header/ChatHeader";
+import { Upload } from "./Upload";
+import { Footer } from "./footer/Footer";
+import { DefaultPage } from "./DefaultPage";
+import { MessageFactory } from "./messages/MessageFactory";
+
+import SocketContext from "./socketContext";
+import {
+  get_url_extension,
+  get_message_type,
+  SUPPORTED_IMAGE_FORMATS,
+} from "../../utils/message";
+
+export default function Chat({
+  chat_id,
+  history,
+  unreadCount,
+  peers,
+  room_name,
+  room_info,
+}) {
+  const [imageViewerState, setImageViewerState] = useState({
+    isOpen: false,
+    currentImage: 0,
+    imagesCount: -1,
+    images: [],
+  });
+  const [isOpen, setIsOpen] = useState(false);
+  const [currImg, setCurrImg] = useState(0);
+
   const dispatch = useDispatch();
 
   const scrollRef = useRef(null);
@@ -17,7 +51,7 @@ export default function Chat({ chat_id, history, unreadCount, peers }) {
   });
 
   useEffect(() => {
-    console.log(chat_id);
+    console.log(history);
     if (chat_id) {
       const scrollMax =
         scrollRef.current.scrollHeight - scrollRef.current.clientHeight;
@@ -27,14 +61,53 @@ export default function Chat({ chat_id, history, unreadCount, peers }) {
     }
   }, [history, scrollRef, setMaxScroll, chat_id]);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    console.log("IMAGE STATE");
+    console.log(imageViewerState);
+  }, [imageViewerState]);
+
+  const handleSubmitText = (text) => {
     dispatch(
       peerMessage({
         chat_id: chat_id,
-        line_text: e.target.value,
+        line_text: text,
         timestamp: Math.floor(new Date() / 1000),
+        type: "Text",
+        status: "pending",
       })
     );
+  };
+
+  const handleSubmitFile = (e) => {
+    const type = SUPPORTED_IMAGE_FORMATS.includes(
+      get_url_extension(e.target.files[0].name)
+    )
+      ? "Image"
+      : "File";
+    const file = e.target.files[0];
+    const fileReader = new FileReader();
+    console.log(file);
+
+    fileReader.readAsArrayBuffer(file);
+    fileReader.onload = (event) => {
+      var blob = new Blob([event.target.result], { type: file.type });
+      dispatch(
+        peerMessage({
+          chat_id: chat_id,
+          file: {
+            id: uuidv1(),
+            data: blob,
+            file_status: "unloaded",
+            name: file.name,
+            size: file.size,
+            type: file.type,
+          },
+          timestamp: Math.floor(new Date() / 1000),
+          type: type,
+          status: "pending",
+        })
+      );
+    };
   };
 
   const scrollHandler = (e) => {
@@ -43,73 +116,70 @@ export default function Chat({ chat_id, history, unreadCount, peers }) {
     }
   };
   return (
-    <div class="col h-100 no-gutters ">
+    <div className="col vh-100 no-gutters " style={{ width: "100%" }}>
+      <Lightbox
+        slides={imageViewerState.images}
+        index={imageViewerState.currentImage}
+        open={imageViewerState.isOpen}
+        close={(e) =>
+          setImageViewerState((prevState) => ({ ...prevState, isOpen: false }))
+        }
+        plugins={[Download]}
+      />
       {chat_id && (
-        <>
-          <ChatHeader room_info={"Last been recently"} room_name={"Hello"} />
-          <div class="d-flex flex-column" style={{ height: "92%" }}>
-            <ul
-              class="chat-scroller list-unstyled d-flex flex-column ms-1 mt-1 align-items-start"
-              id="chat-scroller"
-              style={{ height: "90%", "overflow-y": "scroll" }}
-              onScroll={scrollHandler}
-              ref={scrollRef}
+        <Upload>
+          {chat_id && (
+            <div
+              className="d-flex flex-column h-100 "
+              style={{ "max-width": "100%" }}
             >
-              <div class="mt-auto">
-                {history.map((message, index) => {
-                  return <Message key={index} data={message} />;
-                })}
-
-                <div>
-                  <template x-if="$store.scrollChatButton.visible">
-                    <a
-                      type="button"
-                      class="rounded-circle"
-                      id="scroll-chat-btn-bottom"
-                      // style="position: absolute; left: 94%; bottom: 15%; background-color: gainsboro; animation-duration: 3s;"
-                    >
-                      <div
-                        class="d-flex container justify-content-center align-items-center rounded-circle"
-                        // style="position: relative; height: 50px; width: 50px;"
-                      >
-                        <img
-                          class=""
-                          src="assets/down-arrow-chat.png"
-                          width="25"
-                        />
-                        <template x-if="getChatUnreadMessagesCount() !== -1">
-                          <div
-                            class="d-flex rounded-circle align-items-center justify-content-center"
-                            // style="color: white; background-color: rgb(88, 139, 175); width: 30px; height: 30px; margin-left: 65%; margin-bottom: 65%; position: absolute;"
-                          >
-                            <span x-text="getChatUnreadMessagesCount()"></span>
-                          </div>
-                        </template>
-                      </div>
-                    </a>
-                  </template>
+              <div
+                className="d-flex"
+                style={{ minHeight: "8%", maxHeight: "8%" }}
+              >
+                <div className="col">
+                  <ChatHeader room_info={room_info} room_name={room_name} />
                 </div>
               </div>
-            </ul>
-
-            <textarea
-              class="form-control mb-1"
-              id="chatTextArea"
-              rows="3"
-              onKeyDown={handleSubmit}
-            >
-              d
-            </textarea>
-          </div>
-        </>
+              <div className="col h-100 overflow-hidden ms-2">
+                <ul
+                  className="h-100 chat-scroller list-unstyled d-flex flex-column ms-1 mt-1 align-items-start"
+                  id="chat-scroller"
+                  style={{ overflowY: "scroll" }}
+                  onScroll={scrollHandler}
+                  ref={scrollRef}
+                >
+                  <div className="mt-auto">
+                    {history.map((message, index) => {
+                      console.log(message);
+                      if (!message?.type) {
+                        const message_type = get_message_type(message);
+                        message = Object.assign(
+                          { type: message_type },
+                          message
+                        );
+                      }
+                      return (
+                        <ImageViewerContext.Provider
+                          value={{ imageViewerState, setImageViewerState }}
+                          key={index}
+                        >
+                          <MessageFactory message={message} index={index} />
+                        </ImageViewerContext.Provider>
+                      );
+                    })}
+                  </div>
+                </ul>
+              </div>
+              <Footer
+                handleSubmit={handleSubmitText}
+                handleFile={handleSubmitFile}
+              />
+            </div>
+          )}
+        </Upload>
       )}
-      {!chat_id && (
-        <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
-          <div class="rounded-5 p-1" style={{ "background-color": "#ced4da" }}>
-            Select a chat to start start messaging
-          </div>
-        </div>
-      )}
+      {!chat_id && <DefaultPage />}
     </div>
   );
 }

@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+
+.App * {
+  pointer-events: none;
+}
+
+
+html,
+body {
+  background-color: #ffffff;
+  height: 100%;
+  width: 100%;
+}
+
+    
+#root {
+  height: 100%;
+}

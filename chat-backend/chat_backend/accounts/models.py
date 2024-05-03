@@ -1,8 +1,5 @@
 from django.db import models
-from django.contrib.auth import authenticate
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.utils.translation import gettext_lazy as _
-from rest_framework import serializers
 
 from chat.models import Chat
 
@@ -36,9 +33,8 @@ class ChatUser(AbstractBaseUser):
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
     nickname = models.CharField(max_length=30)
     displaying_name = models.CharField(max_length=30)
-    user_chats = models.ManyToManyField(Chat)
     is_admin = models.BooleanField(default=False)
-
+    avatar = models.CharField(max_length=20)
     objects = ChatUserManager()
 
     USERNAME_FIELD = 'email'

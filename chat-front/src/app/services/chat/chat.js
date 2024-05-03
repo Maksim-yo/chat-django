@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-
+import { useNavigate } from "react-router-dom";
 import { setInitialRooms } from "../../../features/chat/chatSlice";
-
-import Room from "../../../components/Chat/Room";
-import Home from "../../../components/Chat/Home";
+import { setError } from "../../../features/auth/authSlice";
+import SocketContext from "../../../components/Chat/socketContext";
+import HomePage from "../../../components/Home/HomePage";
 
 let CODE_PEER_MESSAGE = 1;
 let CODE_INFO = 2;
@@ -20,12 +20,22 @@ export const Chat = () => {
 
   const [socketUrl, setSocketUrl] = useState("ws://localhost:8000/ws/");
   const [messageHistory, setMessageHistory] = useState([]);
-
+  const navigate = useNavigate();
   const token = useSelector((state) => state.auth.userToken);
 
   const { sendMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl, {
     protocols: ["auth_protocol", "Token_" + token],
-    onError: (event) => console.log(event),
+    onError: (event) => {
+      dispatch(
+        setError({
+          status: 401,
+          data: {
+            message: "Unauthorize ",
+          },
+        })
+      );
+      navigate("login");
+    },
   });
 
   const rooms = useSelector((state) => {
@@ -35,7 +45,6 @@ export const Chat = () => {
   }, shallowEqual);
 
   useEffect(() => {
-    console.log(lastJsonMessage);
     if (!lastJsonMessage) return;
     switch (lastJsonMessage.type) {
       case CODE_INFO:
@@ -59,5 +68,11 @@ export const Chat = () => {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
-  return <Home />;
+  return (
+    <SocketContext.Provider
+      value={{ sendMessage, lastJsonMessage, readyState }}
+    >
+      <HomePage />
+    </SocketContext.Provider>
+  );
 };

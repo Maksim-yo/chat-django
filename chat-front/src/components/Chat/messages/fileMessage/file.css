@@ -1,0 +1,23 @@
+.file {
+
+    background-color: aquamarine;
+    width: 40px;
+    height: 40px;
+    border-radius:  20px;
+}
+
+.file-name {
+    font-weight: 700;
+}
+
+.cancel-btn {
+
+    position: absolute;
+    width:25px;
+    height: 25px;
+}
+
+.file:hover {
+
+    background-color: aqua;
+}

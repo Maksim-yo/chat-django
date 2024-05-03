@@ -1,0 +1,5 @@
+**/venv/
+**/.idea/
+*.bak
+**/__pycache__/
+**/.vscode/

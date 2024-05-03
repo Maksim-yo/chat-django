@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+import rest_framework.authentication
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
     "chat",
     "accounts",
+    'storage'
 
 ]
 
@@ -144,14 +145,14 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [(os.environ.get('REDIS_HOST', '127.0.0.1'), os.environ.get('REDIS_PORT', '6379'))],
         },
     },
 }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
         'accounts.token_auth.ExpiringTokenAuthentication',
 
     ],
@@ -163,6 +164,34 @@ REST_FRAMEWORK = {
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer',
 }
+
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": f"redis://{os.environ.get('REDIS_HOST', '127.0.0.1')}:{os.environ.get('REDIS_PORT', '6379')}",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         }
+#     }
+# }
+
+
 CORS_ORIGIN_ALLOW_ALL = True
 AUTH_USER_MODEL = 'accounts.ChatUser'
 TOKEN_EXPIRED_AFTER_MINUTES = 60 * 24 * 3
+
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://127.0.0.1:6379/0")
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "lyzlov023@gmail.com"
+EMAIL_HOST_PASSWORD = "Kail535556"
+# try:
+#     EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+#     EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+# except KeyError:
+#     raise Exception("Cannot find email service auth data. Please provide in env")
+#
