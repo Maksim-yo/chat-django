@@ -5,28 +5,23 @@ import SignUp from "./components/SignUp/SignUp";
 import Login from "./components/Login/Login";
 import Logout from "./components/Logout/Logout";
 import ProtectedRoute from "./routing/ProtectedRoute";
+import NavigationLoginRoute from "./routing/NavigationLoginRoute";
 import { Chat } from "./app/services/chat/chat";
-import { Test } from "./Test";
 function App() {
   return (
-    // <div className="wrapper">
     <BrowserRouter>
       <Routes>
-        {/* <Route path="*" element={<Room chat_id={1} />}></Route> */}
+        <Route element={<NavigationLoginRoute />}>
+          <Route path="/signup" element={<SignUp />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Chat />}></Route>
 
-        <Route path="/signup" element={<SignUp />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        {/* <Route element={<ProtectedRoute />}> */}
-        <Route path="/" element={<Chat />}></Route>
-
-        {/* <Route path="/" element={<HomePage />} /> */}
-        {/* </Route> */}
-        <Route path="/logout" element={<Logout />}></Route>
-        <Route path="/test" element={<Test />}></Route>
+          <Route path="/logout" element={<Logout />}></Route>
+        </Route>
       </Routes>
     </BrowserRouter>
-
-    // </div>
   );
 }
 
