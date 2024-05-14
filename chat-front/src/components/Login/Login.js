@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { usePostLoginMutation } from "../../app/services/api/apiService";
 import { setToken } from "../../features/auth/authSlice";
 import { LoadingOutlined } from "../LoadingOutlined/LoadingOutlined";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [loading, setLoading] = useState(true);
@@ -114,6 +115,7 @@ export default function Login() {
                   {...register("password")}
                 />
               </div>
+              <Link to="/signup">Don't have an account? Create an account</Link>
 
               <button
                 type="submit"

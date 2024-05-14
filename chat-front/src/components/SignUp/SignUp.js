@@ -1,6 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { usePostSignUpMutation } from "../../app/services/api/apiService";
@@ -13,8 +15,8 @@ export default function SignUp() {
     watch,
   } = useForm();
 
-  // const { loading, userInfo, success } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [
     postSignup,
@@ -23,14 +25,9 @@ export default function SignUp() {
 
   const onErrors = (errors) => console.error(errors);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
-    // if (isSuccess) navigate("/login");
-    console.log(error);
-    console.log(signupResult);
-    // if (userInfo) navigate("/");
-  }, [navigate, signupResult, error]);
+    if (isSuccess) navigate("/login");
+  }, [isSuccess]);
 
   const registerOptions = {
     name: { required: "Userame is required" },
@@ -56,24 +53,27 @@ export default function SignUp() {
                     <p className="text-center h1 fw-bold mb-4 mx-1 mx-md-4 mt-4">
                       Sign up
                     </p>
-
                     <form
                       className="mx-1 mx-md-4"
                       action=""
                       method="POST"
                       onSubmit={handleSubmit(postSignup, onErrors)}
                     >
-                      {error && (
+                      {/* {error && (
                         <div className="text-danger ms-3 mb-2">
                           Error {error.status}: {error.data.detail}
                         </div>
-                      )}
+                      )} */}
                       <div className="d-flex flex-row align-items-center mb-4">
                         <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                         <div className="form-outline flex-fill mb-0">
                           <label className="form-label" for="nickname">
                             Username
                           </label>
+                          <div className="text-danger">
+                            {(errors?.name && errors.name?.message) ||
+                              error?.data?.nickname}
+                          </div>
                           <input
                             type="text"
                             id="nickname"
@@ -81,18 +81,18 @@ export default function SignUp() {
                             className="form-control"
                             {...register("nickname", registerOptions.name)}
                           />
-                          <small className="text-danger">
-                            {errors?.name && errors.name?.message}
-                          </small>
                         </div>
                       </div>
-
                       <div className="d-flex flex-row align-items-center mb-4">
                         <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                         <div className="form-outline flex-fill mb-0">
                           <label className="form-label" for="mail">
                             Email
                           </label>
+                          <div className="text-danger">
+                            {(errors?.email && errors.email?.message) ||
+                              error?.data?.email}
+                          </div>
                           <input
                             type="email"
                             id="mail"
@@ -100,19 +100,18 @@ export default function SignUp() {
                             className="form-control"
                             {...register("email", registerOptions.email)}
                           />
-
-                          <small className="text-danger">
-                            {errors?.email && errors.email?.message}
-                          </small>
                         </div>
                       </div>
-
                       <div className="d-flex flex-row align-items-center mb-4">
                         <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                         <div className="form-outline flex-fill mb-0">
-                          <label className="form-label" for="password1">
+                          <span className="form-label" for="password1">
                             Password
-                          </label>
+                          </span>
+                          <div className="text-danger">
+                            {(errors?.password && errors.password?.message) ||
+                              error?.data?.password}
+                          </div>
                           <input
                             type="password"
                             id="password"
@@ -120,18 +119,19 @@ export default function SignUp() {
                             className="form-control"
                             {...register("password", registerOptions.password)}
                           />
-                          <small className="text-danger">
-                            {errors?.password && errors.password?.message}
-                          </small>
                         </div>
                       </div>
-
-                      <div className="d-flex flex-row align-items-center mb-4">
+                      <div className="d-flex flex-row align-items-center">
                         <i className="fas fa-key fa-lg me-3 fa-fw"></i>
                         <div className="form-outline flex-fill mb-0">
                           <label className="form-label" for="password2">
                             Repeat your password
                           </label>
+                          <div className="text-danger">
+                            {(errors?.confirm_password &&
+                              errors.confirm_password?.message) ||
+                              error?.data?.confirm_password}
+                          </div>
                           <input
                             type="password"
                             id="confirm_password"
@@ -146,14 +146,12 @@ export default function SignUp() {
                               },
                             })}
                           />
-                          <small className="text-danger">
-                            {errors?.confirm_password &&
-                              errors.confirm_password?.message}
-                          </small>
                         </div>
                       </div>
-
-                      <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                      <div className="text-end mt-1">
+                        <Link to="/login">Already have an account?</Link>
+                      </div>
+                      <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4 mt-1">
                         <button
                           type="submit"
                           className="btn btn-primary btn-lg"
