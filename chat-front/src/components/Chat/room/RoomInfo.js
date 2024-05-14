@@ -1,23 +1,29 @@
-export const RoomInfo = ({ title, user_name, user_email, user_tag }) => {
+export const RoomInfo = ({
+  title,
+  user_name,
+  user_email,
+  user_info,
+  image,
+}) => {
   return (
     <div
-      className="modal fade"
+      className="modal fade in"
       id="createModel"
       tabIndex="-1"
       aria-labelledby="createModalLabel"
       aria-hidden="true"
-      data-backdrop="true"
+      // data-bs-backdrop=""
     >
       <div className="modal-dialog " style={{ width: "400px" }}>
         <div className="modal-content ">
           <div className="modal-header">
             <h5 className="modal-title me-2">{title}</h5>
-            {/* <button
+            <button
               type="button"
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-            ></button> */}
+            ></button>
           </div>
           <div
             className="modal-body px-0 "
@@ -31,15 +37,14 @@ export const RoomInfo = ({ title, user_name, user_email, user_tag }) => {
             <div className="row ms-2">
               <div className="col-3 ms-1">
                 <img
-                  src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp"
-                  alt="avatar"
-                  className="rounded-circle shadow-1-strong "
+                  className="rounded-circle  shadow-1-strong ms-3"
                   width="58"
+                  src={image}
                 />
               </div>
               <div className="col px-0">
-                <div className="chat-name">Hello</div>
-                <div className="chat-info">last been recently</div>
+                <div className="chat-name">{user_name}</div>
+                <div className="chat-info">{user_info}</div>
               </div>
             </div>
             <div className="col ms-3 mt-4 px-0">
@@ -60,7 +65,7 @@ export const RoomInfo = ({ title, user_name, user_email, user_tag }) => {
                 </div>
               </div>
             </div>
-            <div className="col mt-4 py-2  info-room-btn " type="button">
+            {/* <div className="col mt-4 py-2  info-room-btn " type="button">
               <div className="row px-0 gap-0 ms-3">
                 <div className="col-2 d-flex ">
                   <svg
@@ -147,7 +152,7 @@ export const RoomInfo = ({ title, user_name, user_email, user_tag }) => {
                   <div className="chat-info ">Photos</div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="modal-footer"></div>
