@@ -4,11 +4,13 @@ export const RoomInfo = ({
   user_email,
   user_info,
   image,
+  chat_id,
+  modal_id,
 }) => {
   return (
     <div
       className="modal fade in"
-      id="createModel"
+      id={modal_id}
       tabIndex="-1"
       aria-labelledby="createModalLabel"
       aria-hidden="true"
@@ -32,7 +34,7 @@ export const RoomInfo = ({
               overflowY: "scroll",
               overflowX: "hidden",
             }}
-            onClick={(e) => e.preventDefault()}
+            // onClick={(e) => e.preventDefault()}
           >
             <div className="row ms-2">
               <div className="col-3 ms-1">
@@ -61,7 +63,7 @@ export const RoomInfo = ({
                 </div>
                 <div className="col-3 px-0 ms-1">
                   <a className="chat-email">{user_email}</a>
-                  <div className="chat-info">Email</div>
+                  <div className="chat-info">Почта</div>
                 </div>
               </div>
             </div>

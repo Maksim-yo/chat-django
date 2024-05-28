@@ -1,14 +1,33 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useUpdateUserDetailsMutation } from "../../app/services/api/apiService";
+
 import "./style.css";
-export const UserIcon = () => {
+export const UserIcon = ({ image }) => {
   const inputFile = useRef(null);
   const [hover, setHover] = useState(false);
-  const handleFile = (e) => {};
+  const [
+    postImageProfile,
+    { data: imageData, isLoading, error, isError, isSuccess },
+  ] = useUpdateUserDetailsMutation();
+
+  const handleFile = (e) => {
+    console.log("CHANGE!");
+    var formData = new FormData();
+    const file = e.target.files[0];
+    formData.append("avatar", file);
+    postImageProfile(formData)
+      .then((data) => console.log("LOADED SUCCS"))
+      .catch((exc) => console.log(exc));
+  };
+  const handle = (e) => {
+    inputFile.current.click();
+  };
+  // useEffect(() => {}, [data]);
   return (
     <div
       onMouseOver={(e) => setHover(true)}
       onMouseLeave={(e) => setHover(false)}
-      onClick={() => inputFile.current.click()}
+      onClick={handle}
       className="icon-container d-flex justify-content-center align-items-center ms-3"
       style={{ overflow: "hidden" }}
     >
@@ -16,7 +35,6 @@ export const UserIcon = () => {
         type="file"
         className="d-none"
         ref={inputFile}
-        multiple
         onChange={handleFile}
       />
       {hover && (
@@ -41,10 +59,11 @@ export const UserIcon = () => {
         </svg>
       )}
       <img
-        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp"
+        src={image}
         alt="avatar"
         className="rounded-circle  shadow-1-strong "
         width="58"
+        height="58"
         style={{
           filter: hover ? " blur(2px)" : "",
         }}

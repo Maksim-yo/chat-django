@@ -4,9 +4,11 @@ import { DownloadFile } from "./fileMessage/DownloadFile";
 import { UploadFile } from "./fileMessage/UploadFIle";
 import { FileMessage } from "./fileMessage/FileMessage";
 import { TextMessage } from "./TextMessage";
-import { ImageMessage } from "./ImageMessage";
+import { UnreadMessageNotifaction } from "./UnreadMessageNotification";
+import ImageMessage from "./ImageMessage";
+import React from "react";
 
-export const MessageFactory = ({ message, index }) => {
+export default React.memo(function MessageFactory({ message, index }) {
   if (message.type === "Text") {
     return (
       <Message key={index} message={message}>
@@ -47,7 +49,9 @@ export const MessageFactory = ({ message, index }) => {
           </DownloadFile>
         </Message>
       );
+  } else if (message.type === "UnreadNotifaction") {
+    return <UnreadMessageNotifaction />;
   }
 
   return null;
-};
+});

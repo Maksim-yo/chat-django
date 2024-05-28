@@ -68,7 +68,10 @@ const baseQuery = fetchBaseQuery({
 });
 
 const baseAppQuery = async (args, api, extraOptions) => {
+  console.log(args);
+
   let result = await baseQuery(args, api, extraOptions);
+
   return result;
 };
 
@@ -83,6 +86,10 @@ export const appApi = createApi({
         url: "accounts/profile/",
         method: "GET",
       }),
+      transformResponse: (response) => {
+        return response;
+      },
+
       providesTags: ["Profile"],
     }),
     updateUserDetails: build.mutation({
@@ -90,6 +97,7 @@ export const appApi = createApi({
         url: "accounts/profile/",
         method: "POST",
         body: data,
+        formData: true,
       }),
       invalidatesTags: ["Profile"],
     }),
@@ -109,6 +117,12 @@ export const appApi = createApi({
         };
       },
     }),
+    findChats: build.query({
+      query: (query_string) => ({
+        url: `chat/find/${query_string}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -122,4 +136,5 @@ export const {
   usePostFileMutation,
   useGetFileQuery,
   useUpdateUserDetailsMutation,
+  useFindChatsQuery,
 } = appApi;

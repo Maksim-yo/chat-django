@@ -1,4 +1,10 @@
-export const ReadStatus = ({ read_status, color_white, is_read }) => {
+import React from "react";
+export default React.memo(function ReadStatus({
+  read_status,
+  color_white,
+  is_read,
+}) {
+  console.log("READSTATUS");
   if (read_status === "pending")
     return (
       <svg
@@ -40,7 +46,7 @@ export const ReadStatus = ({ read_status, color_white, is_read }) => {
         </g>
       </svg>
     );
-  else if (!is_read)
+  else if (read_status === "unread")
     return (
       <div className="d-inline-block">
         <svg
@@ -106,4 +112,4 @@ l-1101 -1100 -386 309 c-519 415 -527 421 -592 440 -118 34 -245 -24 -307
       </svg>
     );
   }
-};
+});

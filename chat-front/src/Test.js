@@ -15,7 +15,7 @@ export const Test = () => {
       <Message>
         {/* <TextMessage message={{ line_text: "hello" }} /> */}
 
-        <ImageMessage image={file} readStatus={true} />
+        {/* <ImageMessage image={file} readStatus={true} /> */}
       </Message>
     </div>
   );

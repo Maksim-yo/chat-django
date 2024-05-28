@@ -15,6 +15,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
+      immutableCheck: false,
 
       // serializableCheck: {
       // ignoredActions: ["chat/peerMessageFile"],
