@@ -12,3 +12,4 @@ randimage==1.2
 numpy==1.26.4
 pytz==2024.1
 channels-redis==4.2.0
+matplotlib==3.8
