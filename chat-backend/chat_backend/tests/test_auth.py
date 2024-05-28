@@ -28,18 +28,33 @@ class AuthTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn('token', response.data)
 
+    def test_signup_with_existing_email(self):
+        data = {
+            'nickname': 'anotheruser',
+            'password': 'Anotherpassword123',
+            'email': 'test@example.com'  # Same email as the existing user
+        }
+        response = self.client.post(self.signup_url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('email', response.data)
     def test_logout(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
         response = self.client.post(self.logout_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['message'], 'Successfully logged out.')
-
+    def test_logout_without_token(self):
+        response = self.client.post(self.logout_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
     def test_profile_get(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
         response = self.client.get(self.profile_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['email'], self.user.email)
         self.assertEqual(response.data['nickname'], self.user.nickname)
+
+    def test_profile_get_without_token(self):
+        response = self.client.get(self.profile_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_profile_post(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
@@ -54,3 +69,10 @@ class AuthTests(APITestCase):
         # Refresh from db
         self.user.refresh_from_db()
         self.assertEqual(self.user.nickname, 'newnickname')
+
+    def test_profile_post_without_token(self):
+        data = {
+            'nickname': 'newnickname',
+        }
+        response = self.client.post(self.profile_url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
