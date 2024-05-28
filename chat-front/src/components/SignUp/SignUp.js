@@ -30,13 +30,18 @@ export default function SignUp() {
   }, [isSuccess]);
 
   const registerOptions = {
-    name: { required: "Userame is required" },
-    email: { required: "Email is required" },
+    name: { required: "Никнейм обязателен" },
+    email: { required: "Почта обязательна" },
     password: {
-      required: "Password is required",
+      required: "Пароль обязателен",
+      pattern: {
+        value: /^[0-9a-zA-Z!\_\-\$\@\#]+$/,
+        message:
+          "Пароль может содержать только английский алфавит и символы: [!$@#_-]",
+      },
       minLength: {
         value: 8,
-        message: "Password must have at least 8 characters",
+        message: "Пароль должен содержать не менее 8 символов",
       },
     },
   };
@@ -51,7 +56,7 @@ export default function SignUp() {
                 <div className="row justify-content-center">
                   <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                     <p className="text-center h1 fw-bold mb-4 mx-1 mx-md-4 mt-4">
-                      Sign up
+                      Регистрация
                     </p>
                     <form
                       className="mx-1 mx-md-4"
@@ -59,16 +64,11 @@ export default function SignUp() {
                       method="POST"
                       onSubmit={handleSubmit(postSignup, onErrors)}
                     >
-                      {/* {error && (
-                        <div className="text-danger ms-3 mb-2">
-                          Error {error.status}: {error.data.detail}
-                        </div>
-                      )} */}
                       <div className="d-flex flex-row align-items-center mb-4">
                         <i className="fas fa-user fa-lg me-3 fa-fw"></i>
                         <div className="form-outline flex-fill mb-0">
                           <label className="form-label" for="nickname">
-                            Username
+                            Имя
                           </label>
                           <div className="text-danger">
                             {(errors?.name && errors.name?.message) ||
@@ -87,7 +87,7 @@ export default function SignUp() {
                         <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                         <div className="form-outline flex-fill mb-0">
                           <label className="form-label" for="mail">
-                            Email
+                            Почта
                           </label>
                           <div className="text-danger">
                             {(errors?.email && errors.email?.message) ||
@@ -106,7 +106,7 @@ export default function SignUp() {
                         <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                         <div className="form-outline flex-fill mb-0">
                           <span className="form-label" for="password1">
-                            Password
+                            Пароль
                           </span>
                           <div className="text-danger">
                             {(errors?.password && errors.password?.message) ||
@@ -125,7 +125,7 @@ export default function SignUp() {
                         <i className="fas fa-key fa-lg me-3 fa-fw"></i>
                         <div className="form-outline flex-fill mb-0">
                           <label className="form-label" for="password2">
-                            Repeat your password
+                            Повторите пароль
                           </label>
                           <div className="text-danger">
                             {(errors?.confirm_password &&
@@ -149,7 +149,7 @@ export default function SignUp() {
                         </div>
                       </div>
                       <div className="text-end mt-1">
-                        <Link to="/login">Already have an account?</Link>
+                        <Link to="/login">Уже имеется акаунт?</Link>
                       </div>
                       <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4 mt-1">
                         <button
@@ -164,10 +164,10 @@ export default function SignUp() {
                                 role="status"
                                 aria-hidden="true"
                               ></span>
-                              <span className="">Loading...</span>
+                              <span className="">Загрузка...</span>
                             </>
                           ) : (
-                            "Sign up"
+                            "Регистрация"
                           )}
                         </button>
                       </div>

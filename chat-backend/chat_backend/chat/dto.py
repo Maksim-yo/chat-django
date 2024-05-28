@@ -7,6 +7,9 @@ class MessageTypes(enum.IntEnum):
 
     CODE_PEER_MESSAGE = 1
     CODE_CHAT_INFO = 2
+    CODE_MESSAGE_ACK = 3
+    CODE_ROOM_CREATED = 4
+    CODE_PEER_READ = 5
 
 @dataclass
 class MessageInfo:
@@ -19,7 +22,9 @@ class MessageInfo:
 
 @dataclass
 class PeerDto:
-    username: str
+    email: str
+    avatar: str
+    nickname: str
 
 @dataclass
 class File:
@@ -34,18 +39,21 @@ class MessageDto:
     message_hash: str
     line_text: str
     chat_id: int
+    timestamp: int
+    peer_email: str
     file: File = None
     is_read: bool = False
 
-@dataclass
-class ChatDto:
-    chat_id: int
-    history: List[MessageDto]
-    peers: List[PeerDto]
 
 @dataclass
 class ChatMessage(MessageInfo):
     message: MessageDto
+
+@dataclass
+class ChatDto:
+    chat_id: int
+    history: List[ChatMessage]
+    peers: List[PeerDto]
 
 
 @dataclass

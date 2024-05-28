@@ -5,7 +5,7 @@ export const DefaultPage = () => {
         className="p-1"
         style={{ backgroundColor: "#ced4da", borderRadius: "20px" }}
       >
-        Select a chat to start messaging
+        Выберите чат для начала общения
       </div>
     </div>
   );

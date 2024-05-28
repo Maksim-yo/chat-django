@@ -14,10 +14,10 @@ export function convertSecondsToDate(seconds) {
 }
 
 export function getMessageStringDate(timestamp) {
-  const date = convertSecondsToDate(timestamp);
-  if (date["minutes"] >= 0 && date["minutes"] <= 9)
-    date["minutes"] = "0" + date["minutes"];
-  return date["hours"] + ":" + date["minutes"];
+  const time_obj = convertSecondsToDate(timestamp);
+  let hours = String(time_obj.hours).padStart(2, "0");
+  let minutes = String(time_obj.minutes).padStart(2, "0");
+  return `${hours}:${minutes}`;
 }
 
 export function get_url_extension(url) {
@@ -38,4 +38,19 @@ export function get_message_type(message) {
 
 export function hash_message(message) {
   return sha1(message);
+}
+
+export function decodeBase64(base64) {
+  const text = atob(base64);
+  const length = text.length;
+  const bytes = new Uint8Array(length);
+  for (let i = 0; i < length; i++) {
+    bytes[i] = text.charCodeAt(i);
+  }
+  return bytes;
+}
+
+export function convertBase64ToBlob(data, type) {
+  const result_binary = decodeBase64(data);
+  return new Blob([result_binary], { type: type });
 }

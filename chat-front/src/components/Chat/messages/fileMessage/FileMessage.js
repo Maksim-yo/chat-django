@@ -54,11 +54,18 @@ export const FileMessage = ({
           </div>
         </div>
         <div className="col ms-3 ">
-          <div clas="file-name text-truncate" style={{ overflow: "hidden" }}>
-            {file_name}
-          </div>
-          <div className="text-black-50">
-            {loading ? 0 : file_size}/{file_size}
+          <div className="row">
+            <div
+              className="text-truncate"
+              style={{
+                maxWidth: "200px",
+              }}
+            >
+              <a clas="file-name ">{file_name}</a>
+              <div className="text-black-50">
+                {loading ? 0 : file_size}/{file_size}
+              </div>
+            </div>
           </div>
         </div>
       </div>

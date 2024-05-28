@@ -26,11 +26,12 @@ SECRET_KEY = "django-insecure-rkev=($l-_6k=_s^!mgmonnjx78)^8l2n2zbo9s(etxj9xh)f=
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000']
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000']
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:3000',
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://127.0.0.1:3000',
+# ]
 # Application definition
 
 INSTALLED_APPS = [
@@ -176,7 +177,6 @@ REST_AUTH_SERIALIZERS = {
 # }
 
 
-CORS_ORIGIN_ALLOW_ALL = True
 AUTH_USER_MODEL = 'accounts.ChatUser'
 TOKEN_EXPIRED_AFTER_MINUTES = 60 * 24 * 3
 
@@ -184,14 +184,11 @@ CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://127.0.0.1:6379/0")
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "lyzlov023@gmail.com"
-EMAIL_HOST_PASSWORD = "Kail535556"
+
 # try:
 #     EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 #     EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 # except KeyError:
 #     raise Exception("Cannot find email service auth data. Please provide in env")
 #
+

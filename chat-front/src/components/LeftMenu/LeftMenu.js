@@ -1,11 +1,39 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-
-import { Search } from "./Search";
-import { UserIcon } from "./UserIcon";
+import "../Chat/chat.css";
+import Search from "./Search";
+import SettingsModal from "./SettingsIModal";
+import { EditNameModal } from "./EditNameModal";
+import { useGetUserDetailsQuery } from "../../app/services/api/apiService";
+import { useGetFileQuery } from "../../app/services/api/apiService";
+import { convertBase64ToBlob } from "../../utils/message";
+import { skipToken } from "@reduxjs/toolkit/query";
+import { UserIcon } from "./UserIcon.1";
+import React from "react";
+import { useSelector } from "react-redux";
 const LeftMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [logoutClick, setLogoutClick] = useState(false);
+  const [username, setUsername] = useState("");
+  const [image, setImage] = useState(null);
+  const [image_hash, setImageHash] = useState(skipToken);
+
+  const { data, isFetching } = useGetUserDetailsQuery();
+
+  const {
+    data: imageData,
+    error,
+    isError,
+    isSuccess,
+    isLoading,
+  } = useGetFileQuery(image_hash);
+  useEffect(() => {
+    if (imageData) {
+      const json_data = JSON.parse(imageData);
+      const file = convertBase64ToBlob(json_data.data, "image/jpeg");
+      setImage(URL.createObjectURL(file));
+    }
+  }, [imageData]);
   useEffect(() => {
     document.addEventListener("keydown", (e) => {
       e.key === "Escape" && setIsOpen(false);
@@ -14,6 +42,12 @@ const LeftMenu = () => {
       document.removeEventListener("keydown", (e) => e);
     };
   }, [isOpen]);
+  useEffect(() => {
+    if (data) {
+      setUsername(data.nickname);
+      setImageHash(data.avatar);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (logoutClick) logoutClick = false;
@@ -27,7 +61,7 @@ const LeftMenu = () => {
   //   const nickaname = "Hello";
 
   return (
-    <div className="menu row d-flex justify-content-center">
+    <div className="d-flex menu  d-flex justify-content-center flex-grow-1">
       <div className="input-group rounded mb-2 mt-3">
         <div className="navBar">
           <button
@@ -51,10 +85,16 @@ const LeftMenu = () => {
                 className="d-flex"
                 style={{ position: "relative", display: "block" }}
               >
-                <UserIcon />
+                {/* <img
+                  src={image}
+                  alt="avatar"
+                  className="rounded-circle  shadow-1-strong ms-3"
+                  width="58"
+                /> */}
+                <UserIcon image={image} />
               </div>
               <div className="pt-1 ms-3">
-                <p className="fw-bold mb-0">Hello</p>
+                <p className="fw-bold mb-0">{username}</p>
               </div>
             </div>
             <a
@@ -65,15 +105,25 @@ const LeftMenu = () => {
               &times;
             </a>
             {/* <a href=" #" className="mt-4"> */}
-            <Link to="logout/">Logout</Link>
-            <Link>Settings</Link>
+            <Link>
+              <div
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#settingsModel"
+              >
+                Настройки
+              </div>
+            </Link>
+            <Link to="logout/">Выход</Link>
+
             {/* </a> */}
           </div>
         </div>
         <Search disable={isOpen} />
+        <SettingsModal data={data} image={image} />
       </div>
     </div>
   );
 };
 
-export default LeftMenu;
+export default React.memo(LeftMenu);

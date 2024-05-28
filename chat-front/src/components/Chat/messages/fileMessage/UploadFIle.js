@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import React from "react";
 import { usePostFileMutation } from "../../../../app/services/api/apiService";
 import { changeFileStatus } from "../../../../features/chat/chatSlice";
-// import { upload } from "../../../../features/upload/upload";
 export const UploadFile = ({
   children,
   message,
@@ -16,13 +14,16 @@ export const UploadFile = ({
   const [loaded, setLoaded] = useState(0);
   const [loading, setLoading] = useState(false);
   const [postFile, { data, error, isLoading }] = usePostFileMutation();
-
+  const [file, setFile] = useState();
+  const [image, setImage] = useState({
+    data: message.file.data,
+    preview: false,
+  });
   const dispatch = useDispatch();
 
   const onLoaded = (data) => {
-    console.log("DATA CHAGEN");
     console.log(data);
-    console.log(data.data);
+    console.log(message);
     dispatch(
       changeFileStatus({
         chat_id: message.chat_id,
@@ -37,12 +38,10 @@ export const UploadFile = ({
     delete new_message.file.file_status;
     delete new_message.file.data;
     setLoading(false);
-    setMessageToSend({ ...new_message, type: "peer_message" });
+    setMessageToSend({ ...new_message, type: 1 });
   };
 
   const upload = (file, chat_id) => {
-    console.log(file.data);
-    console.log(message);
     var formData = new FormData();
     formData.append("data", file.data);
     formData.append("name", file.name);
@@ -58,7 +57,6 @@ export const UploadFile = ({
   };
 
   useEffect(() => {
-    console.log(message);
     setLoading(true);
     setProgress(1);
     upload(message.file, message.chat_id);
@@ -73,7 +71,7 @@ export const UploadFile = ({
       progress: progress,
       file_name: message.file.name,
       file_size: message.file.size,
-      image_file: message.file.data,
+      image_file: image,
       setSpacing: setSpacing,
       setHover: setHover,
     });

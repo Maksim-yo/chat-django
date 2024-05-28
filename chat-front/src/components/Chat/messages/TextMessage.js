@@ -1,9 +1,14 @@
 import { useEffect } from "react";
 
-export const TextMessage = ({ message, readStatus, setMessageToSend }) => {
+export const TextMessage = ({
+  message,
+  readStatus,
+  setMessageToSend,
+  test,
+}) => {
   useEffect(() => {
-    setMessageToSend({ ...message, type: "peer_message" });
-  }, []);
+    setMessageToSend({ ...message, type: 1 });
+  }, [test]);
   return <span className="text-break">{message?.line_text}</span>;
 
   // return (

@@ -5,7 +5,7 @@ export const DateMessage = ({ date }) => {
         <div className="d-flex">
           <div
             className="d-inline-block"
-            style={{ "max-width": "150px", "word-wrap": "break-word" }}
+            style={{ maxWidth: "150px", "word-wrap": "break-word" }}
           >
             <div className="span" x-text={date}></div>
           </div>

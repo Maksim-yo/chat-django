@@ -3,14 +3,17 @@ import React, { useEffect, useState } from "react";
 
 import { useGetFileQuery } from "../../../app/services/api/apiService";
 import { convertBase64ToBlob } from "../../../utils/message";
-export default React.memo(function ChatHeader({
+export default function ChatHeader({
   room_name,
   room_info,
   room_email,
   avatar,
+  chat_id,
 }) {
   const [image, setImage] = useState(null);
-  console.log("HEADER");
+  console.log(chat_id);
+  const modal_id = `createModel_${chat_id}`;
+  const bs_target = `#${modal_id}`;
   const { data, error, isError, isSuccess, isLoading } =
     useGetFileQuery(avatar);
 
@@ -32,7 +35,8 @@ export default React.memo(function ChatHeader({
         className=""
         type="button"
         data-bs-toggle="modal"
-        data-bs-target="#createModel"
+        data-bs-target={bs_target}
+        onClick={console.log(room_name)}
       >
         <div className="row no-gutters g-0">
           <div className="d-flex flex-row align-items-center">
@@ -50,12 +54,14 @@ export default React.memo(function ChatHeader({
         </div>
       </div>
       <RoomInfo
-        title={"User Info"}
+        title={"Информация о пользователе"}
         user_email={room_email}
         user_info={room_info}
         user_name={room_name}
         image={image}
+        chat_id={chat_id}
+        modal_id={modal_id}
       />
     </>
   );
-});
+}

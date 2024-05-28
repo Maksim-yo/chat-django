@@ -12,8 +12,9 @@ from rest_framework.request import Request
 from .serializers import SignupSerializer, UserSerializer
 from .token_auth import create_token
 from .utils import generate_confirm_url
-from .tasks import send_confirm_message
 import storage.config as storage_config
+from rest_framework.parsers import MultiPartParser
+from rest_framework.decorators import parser_classes
 
 
 @api_view(['POST'])
@@ -41,8 +42,9 @@ def logout(request):
 
 
 # Add serializer
-@permission_classes([IsAuthenticated])
 @api_view(['POST', 'GET'])
+@parser_classes([MultiPartParser])
+@permission_classes([IsAuthenticated])
 def profile(request):
 
     if request.method == "GET":
@@ -52,7 +54,7 @@ def profile(request):
         avatar = request.data.get('avatar', None)
 
         if avatar:
-            file_hash = storage_config.file_service.upload_file(f"{request.user.id}/", f"user_avatar_{request.user.id}", avatar)
+            file_hash = storage_config.file_service.upload_file(f"{request.user.id}/", f"user_avatar_{request.user.id}", avatar.read())
             request.user.avatar = file_hash
         if nickname:
             request.user.nickname = nickname

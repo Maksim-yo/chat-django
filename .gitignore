@@ -1,5 +1,10 @@
 **/venv/
 **/.idea/
 *.bak
-**/__pycache__/
+__pycache__/
 **/.vscode/
+<<<<<<< HEAD
+*.sqlite3
+=======
+**/*.sqlite3
+>>>>>>> 98824ff (update .gitignore)
