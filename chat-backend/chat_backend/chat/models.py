@@ -6,8 +6,10 @@ from django.db.models.signals import post_save
 import os
 import sys
 
+
 class Chat(models.Model):
     chat_id = models.AutoField(primary_key=True)
+
     # TODO: Add constrain for uniqueness
     chat_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="user_chats")
 
@@ -52,5 +54,5 @@ class ChatLine(models.Model):
     file = models.ForeignKey(File, null=True, on_delete=models.CASCADE)
     created_at = models.DateTimeField(null=False)
     is_read = models.BooleanField(default=False)
-    message_hash = models.CharField(max_length=255, null=False)
+    message_hash = models.CharField(max_length=255, null=False, unique=True)
 

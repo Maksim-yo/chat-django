@@ -16,6 +16,7 @@ def file_download(file_hash: str):
     try:
         file = config.file_service.download_file(file_hash)
         file.data = base64.b64encode(file.data).decode()
+        print(file.name)
         return json.dumps(file, default=lambda o: o.__dict__)
     except Exception as e:
         return {'error': str(e)}

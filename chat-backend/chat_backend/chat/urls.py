@@ -7,5 +7,7 @@ app_name = "chat"
 urlpatterns = [
     # path('test/', test, name="test"),
     path('upload/', views.file_upload, name="upload"),
-    path('download/<str:file_hash>', views.file_download, name="download")
+    path('download/<str:file_hash>', views.file_download, name="download"),
+    path('find/<str:mail>', views.find_peers_by_mail, name="find_chats"),
+
 ]

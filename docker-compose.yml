@@ -1,11 +1,9 @@
 version: '3.7'
 services:
-  app:
-    build: .
+  backend:
+    build: ./chat-backend/chat_backend
     stdin_open: true
     tty: true
-
-
     ports:
       - "8000:8000"
     command:
@@ -14,7 +12,8 @@ services:
       - |
         python manage.py makemigrations accounts
         python manage.py migrate accounts
-        python manage.py makemigrations
+        python manage.py makemigrations storage
+        python manage.py makemigrations chat
         python manage.py migrate
         python manage.py runserver 0.0.0.0:8000
 
@@ -35,6 +34,16 @@ services:
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
+
+  frontend: 
+    build: ./chat-front/
+    depends_on:
+      - backend
+    environment:
+      CI: ""
+    ports:
+      - "3000:3000"
+
 
   db:
     image: postgres:15
