@@ -23,7 +23,8 @@ export const EditNameModal = ({ isVisible, setIsVisible, username }) => {
   }, [username]);
 
   const handleChange = (event) => {
-    setValue(event.target.value);
+    if ("/^[0-9a-zA-Z_-]+$/".test(event.target.value))
+      setValue(event.target.value);
   };
   return (
     <div

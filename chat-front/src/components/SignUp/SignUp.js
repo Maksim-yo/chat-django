@@ -30,7 +30,14 @@ export default function SignUp() {
   }, [isSuccess]);
 
   const registerOptions = {
-    name: { required: "Никнейм обязателен" },
+    name: {
+      required: "Никнейм обязателен",
+      pattern: {
+        value: /^[0-9a-zA-Z\_\-]+$/,
+        message:
+          "Никнейм может содержать только английский алфавит и символы: [_-]",
+      },
+    },
     email: { required: "Почта обязательна" },
     password: {
       required: "Пароль обязателен",
