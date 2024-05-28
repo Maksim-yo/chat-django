@@ -19,7 +19,3 @@ def create_random_image():
 
     return byte_stream.read()
 
-data = create_random_image()
-bin_data = BytesIO(data)
-image = Image.open(bin_data)
-image.save("test.png")
